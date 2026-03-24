@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Vedette — Klantportaal</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .portal-intro {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--olive);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .portal-avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--olive);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--gold-light);
+    flex-shrink: 0;
+    letter-spacing: 0.05em;
+  }
+  .portal-intro-text h2 {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .portal-intro-text p {
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  .progress-wrap {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .progress-bar-bg {
+    flex: 1; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--olive) 0%, var(--gold) 100%);
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+  .progress-label {
+    font-size: 11px;
+    color: var(--ink-muted);
+    white-space: nowrap;
+  }
+  .phase-flow {
+    display: flex;
+    gap: 0;
+    margin-bottom: 28px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .phase {
+    flex: 1;
+    padding: 12px 10px;
+    text-align: center;
+    font-size: 11px;
+    background: var(--white);
+    color: var(--ink-muted);
+    border-right: 1px solid var(--border);
+    letter-spacing: 0.04em;
+  }
+  .phase:last-child { border-right: none; }
+  .phase.done {
+    background: var(--success-bg);
+    color: var(--success);
+  }
+  .phase.active {
+    background: var(--olive);
+    color: var(--gold-light);
+    font-weight: 500;
+  }
+  .phase-num {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 300;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .goedkeuring-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+  .goedkeuring-item:last-child { border-bottom: none; }
+  .goedkeuring-item:hover { background: var(--olive-bg); }
+  .gi-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .gi-body { flex: 1; }
+  .gi-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+  .gi-sub { font-size: 11px; color: var(--ink-muted); }
+  .gi-action { display: flex; gap: 6px; margin-top: 8px; }
+  .gi-btn {
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--ink);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    text-decoration: none;
+    transition: all 0.1s;
+  }
+  .gi-btn.approve { background: var(--olive); color: var(--gold-light); border-color: var(--olive); }
+  .gi-btn.approve:hover { background: var(--olive-dark); }
+  .gi-btn:hover { border-color: var(--gold); }
+  .doc-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 20px;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    transition: background 0.1s;
+  }
+  .doc-row:last-child { border-bottom: none; }
+  .doc-row:hover { background: var(--olive-bg); }
+  .doc-icon { font-size: 16px; flex-shrink: 0; }
+  .doc-name { flex: 1; font-size: 12px; color: var(--ink); }
+  .doc-date { font-size: 11px; color: var(--ink-muted); white-space: nowrap; }
+  .feedback-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    margin-top: 16px;
+  }
+  .feedback-box h3 {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .feedback-box p {
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .feedback-contact {
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .fc-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--ink-muted);
+  }
+  .fc-item strong { color: var(--ink); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="sv-header">
+  <div class="sv-header-inner">
+    <div class="sv-logo-block">
+      <div class="sv-logo-name">studio <em>vedette</em></div>
+      <div class="sv-logo-rule"></div>
+      <div class="sv-logo-tagline">jouw vakmanschap in de kijker</div>
+    </div>
+    <div class="sv-header-meta">
+      <div class="sv-date-badge" id="datebadge">—</div>
+      <div class="sv-greeting">klantportaal</div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="sv-main">
+
+  <!-- KLANT INTRO -->
+  <div class="portal-intro sv-animate sv-delay-1">
+    <div class="portal-avatar">DG</div>
+    <div class="portal-intro-text" style="flex:1">
+      <h2>Welkom, DeSmedt Group</h2>
+      <p>Jouw projectportaal · Beheerd door Studio Vedette · Alleen zichtbaar voor jou</p>
+      <div class="progress-wrap">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width: 60%"></div>
+        </div>
+        <span class="progress-label">Project 60% compleet</span>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:11px;color:var(--ink-muted);margin-bottom:3px">Projectmanager</div>
+      <div style="font-size:13px;font-weight:500;color:var(--ink)">Studio Vedette</div>
+    </div>
+  </div>
+
+  <!-- FASES -->
+  <p class="sv-section-label sv-animate sv-delay-1">Projectfasen</p>
+  <div class="phase-flow sv-animate sv-delay-1">
+    <div class="phase done"><span class="phase-num">1</span>Kick-off</div>
+    <div class="phase done"><span class="phase-num">2</span>Concept</div>
+    <div class="phase active"><span class="phase-num">3</span>Ontwerp</div>
+    <div class="phase"><span class="phase-num">4</span>Review</div>
+    <div class="phase"><span class="phase-num">5</span>Oplevering</div>
+  </div>
+
+  <!-- GOEDKEURINGEN + PLANNING -->
+  <div class="sv-two-col sv-animate sv-delay-2">
+
+    <div class="sv-card">
+      <div class="sv-card-header">
+        <span class="sv-card-title">✅ GOEDKEURINGEN</span>
+        <span class="sv-badge sv-badge-amber">2 open</span>
+      </div>
+      <div class="goedkeuring-item">
+        <span class="gi-icon">🎨</span>
+        <div class="gi-body">
+          <div class="gi-title">Logo voorstel v2</div>
+          <div class="gi-sub">Bekijk het voorstel en laat weten wat je ervan vindt</div>
+          <div class="gi-action">
+            <a class="gi-btn approve" href="#" target="_blank">Goedkeuren</a>
+            <a class="gi-btn" href="#" target="_blank">Revisie vragen</a>
+          </div>
+        </div>
+      </div>
+      <div class="goedkeuring-item">
+        <span class="gi-icon">📱</span>
+        <div class="gi-body">
+          <div class="gi-title">Instagram post 24/03</div>
+          <div class="gi-sub">Tekstcontrole vereist voor publicatie</div>
+          <div class="gi-action">
+            <a class="gi-btn approve" href="#" target="_blank">Goedkeuren</a>
+            <a class="gi-btn" href="#" target="_blank">Revisie vragen</a>
+          </div>
+        </div>
+      </div>
+      <div class="goedkeuring-item" style="opacity:0.6">
+        <span class="gi-icon">✅</span>
+        <div class="gi-body">
+          <div class="gi-title">Kleurenpalet brandgids</div>
+          <div class="gi-sub">Goedgekeurd door jou op 18 mrt 2026</div>
+        </div>
+        <span class="sv-badge sv-badge-green">Goedgekeurd</span>
+      </div>
+    </div>
+
+    <div class="sv-card">
+      <div class="sv-card-header">
+        <span class="sv-card-title">📅 PROJECTPLANNING</span>
+      </div>
+      <a class="sv-row" href="#" target="_blank">
+        <span class="sv-dot sv-dot-green"></span>
+        <span class="sv-row-name">Kick-off & briefing</span>
+        <span class="sv-badge sv-badge-green">Afgerond</span>
+      </a>
+      <a class="sv-row" href="#" target="_blank">
+        <span class="sv-dot sv-dot-green"></span>
+        <span class="sv-row-name">Logo & huisstijl</span>
+        <span class="sv-badge sv-badge-blue">In uitvoering</span>
+      </a>
+      <a class="sv-row" href="#" target="_blank">
+        <span class="sv-dot sv-dot-gray"></span>
+        <span class="sv-row-name">Website design</span>
+        <span class="sv-badge sv-badge-gray">Ingepland</span>
+      </a>
+      <a class="sv-row" href="#" target="_blank">
+        <span class="sv-dot sv-dot-gray"></span>
+        <span class="sv-row-name">Social media opstart</span>
+        <span class="sv-badge sv-badge-gray">Ingepland</span>
+      </a>
+      <a class="sv-row" href="#" target="_blank">
+        <span class="sv-dot sv-dot-gray"></span>
+        <span class="sv-row-name">Finale oplevering</span>
+        <span class="sv-badge sv-badge-gray">Ingepland</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- CONTENT KALENDER -->
+  <div class="sv-card sv-animate sv-delay-3" style="margin-bottom:16px">
+    <div class="sv-card-header">
+      <span class="sv-card-title">📱 GEPLANDE CONTENT — KOMENDE 7 DAGEN</span>
+      <a class="sv-card-link" href="#" target="_blank">Volledige kalender →</a>
+    </div>
+    <a class="sv-content-row" href="#" target="_blank">
+      <span class="sv-content-date">ma 24/03</span>
+      <span class="sv-content-name">Achter de schermen productielijn</span>
+      <span class="sv-chip">IG Reel</span>
+      <span class="sv-badge sv-badge-amber">Review nodig</span>
+    </a>
+    <a class="sv-content-row" href="#" target="_blank">
+      <span class="sv-content-date">wo 26/03</span>
+      <span class="sv-content-name">Team spotlight — directeur interview</span>
+      <span class="sv-chip">LinkedIn</span>
+      <span class="sv-badge sv-badge-green">Goedgekeurd</span>
+    </a>
+    <a class="sv-content-row" href="#" target="_blank">
+      <span class="sv-content-date">vr 28/03</span>
+      <span class="sv-content-name">Productfoto carousel — nieuwe collectie</span>
+      <span class="sv-chip">Instagram</span>
+      <span class="sv-badge sv-badge-gray">In opmaak</span>
+    </a>
+  </div>
+
+  <!-- DOCUMENTEN -->
+  <div class="sv-card sv-animate sv-delay-4" style="margin-bottom:16px">
+    <div class="sv-card-header">
+      <span class="sv-card-title">📄 JOUW DOCUMENTEN</span>
+    </div>
+    <a class="doc-row" href="#" target="_blank">
+      <span class="doc-icon">📋</span>
+      <span class="doc-name">Offerte #2024-047 — Branding & Webdesign</span>
+      <span class="sv-badge sv-badge-green">Ondertekend</span>
+      <span class="doc-date">12 jan 2026</span>
+    </a>
+    <a class="doc-row" href="#" target="_blank">
+      <span class="doc-icon">🧾</span>
+      <span class="doc-name">Factuur #INV-0312 — Voorschot 50%</span>
+      <span class="sv-badge sv-badge-green">Betaald</span>
+      <span class="doc-date">15 jan 2026</span>
+    </a>
+    <a class="doc-row" href="#" target="_blank">
+      <span class="doc-icon">🧾</span>
+      <span class="doc-name">Factuur #INV-0389 — Saldo 50%</span>
+      <span class="sv-badge sv-badge-amber">Openstaand</span>
+      <span class="doc-date">Vervalt 30 mrt</span>
+    </a>
+    <a class="doc-row" href="#" target="_blank">
+      <span class="doc-icon">🎨</span>
+      <span class="doc-name">Brandgids DeSmedt Group v1.2</span>
+      <span class="sv-badge sv-badge-gold">Definitief</span>
+      <span class="doc-date">22 feb 2026</span>
+    </a>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div class="feedback-box sv-animate sv-delay-5">
+    <h3>Heb je een vraag of feedback?</h3>
+    <p>Laat een opmerking achter op de relevante sectie via Notion, of neem direct contact op met je projectmanager bij Studio Vedette.</p>
+    <div class="feedback-contact">
+      <div class="fc-item">📧 <strong>hello@studiovedette.be</strong></div>
+      <div class="fc-item">📞 <strong>+32 (0) — — — —</strong></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  const now = new Date();
+  const maanden = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+  document.getElementById('datebadge').textContent =
+    `${now.getDate()} ${maanden[now.getMonth()]} ${now.getFullYear()}`;
+</script>
+</body>
+</html>
